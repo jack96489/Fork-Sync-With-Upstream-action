@@ -94,9 +94,9 @@ git branch -m "release/${LAST_TAG}"
 git merge "${LAST_TAGGED}"
 git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git push -u origin "release/${LAST_TAG}"
-git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
+#git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
 gh auth login --with-token ${INPUT_GITHUB_TOKEN}
-gh pr create --title "Release ${LAST_TAG}" --body "$(git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS})"
+gh pr create --title "Release ${LAST_TAG}" # --body "$(git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS})"
 
 
 #if [ "${LOCAL_COMMIT_HASH}" = "${UPSTREAM_COMMIT_HASH}" ]; then
