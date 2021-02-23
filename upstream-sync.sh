@@ -95,6 +95,9 @@ git merge "${LAST_TAGGED}"
 git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git push -u origin "release/${LAST_TAG}"
 
+gh pr create --title "Release ${LAST_TAG}" --body "$(git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS})"
+
+
 #if [ "${LOCAL_COMMIT_HASH}" = "${UPSTREAM_COMMIT_HASH}" ]; then
 #    echo "::set-output name=has_new_commits::false"
 #    echo 'No new commits to sync, exiting' 1>&1
