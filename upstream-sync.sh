@@ -83,7 +83,7 @@ git fetch ${INPUT_GIT_FETCH_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
 LOCAL_COMMIT_HASH=$(git rev-parse "${INPUT_TARGET_BRANCH}")
 UPSTREAM_COMMIT_HASH=$(git rev-parse upstream/"${INPUT_UPSTREAM_BRANCH}")
 
-git checkout -b temp
+git branch temp
 #git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}" --tag
 git fetch upstream "${INPUT_UPSTREAM_BRANCH}" --tag
 git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
