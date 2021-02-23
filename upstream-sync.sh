@@ -84,7 +84,7 @@ LOCAL_COMMIT_HASH=$(git rev-parse "${INPUT_TARGET_BRANCH}")
 UPSTREAM_COMMIT_HASH=$(git rev-parse upstream/"${INPUT_UPSTREAM_BRANCH}")
 
 git checkout -b temp
-git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
+git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}" --tag
 git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 LAST_TAGGED=$(git rev-list --tags --max-count=1)
 git checkout -b "${LAST_TAGGED}" 
