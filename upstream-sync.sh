@@ -90,10 +90,10 @@ git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
 LAST_TAGGED=$(git rev-list --tags --max-count=1)
 LAST_TAG=$(git describe --tags "${LAST_TAGGED}")
 git checkout temp
+git branch -m "release/${LAST_TAG}"
 git merge "${LAST_TAGGED}"
 git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git push -u origin "release/${LAST_TAG}"
-git branch -d temp
 
 #if [ "${LOCAL_COMMIT_HASH}" = "${UPSTREAM_COMMIT_HASH}" ]; then
 #    echo "::set-output name=has_new_commits::false"
