@@ -83,28 +83,36 @@ git fetch ${INPUT_GIT_FETCH_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
 LOCAL_COMMIT_HASH=$(git rev-parse "${INPUT_TARGET_BRANCH}")
 UPSTREAM_COMMIT_HASH=$(git rev-parse upstream/"${INPUT_UPSTREAM_BRANCH}")
 
-if [ "${LOCAL_COMMIT_HASH}" = "${UPSTREAM_COMMIT_HASH}" ]; then
-    echo "::set-output name=has_new_commits::false"
-    echo 'No new commits to sync, exiting' 1>&1
-    reset_git
-    exit 0
-fi
+git checkout -b temp
+git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
+git log ${INPUT_GIT_LOG_FORMAT_ARGS}
+LAST_TAGGED=$(git rev-list --tags --max-count=1)
+git checkout -b "${LAST_TAGGED}" 
+git branch -d temp
+git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 
-echo "::set-output name=has_new_commits::true"
+#if [ "${LOCAL_COMMIT_HASH}" = "${UPSTREAM_COMMIT_HASH}" ]; then
+#    echo "::set-output name=has_new_commits::false"
+#    echo 'No new commits to sync, exiting' 1>&1
+#    reset_git
+#    exit 0
+#fi
+
+#echo "::set-output name=has_new_commits::true"
 # display commits since last sync
-echo 'New commits being synced:' 1>&1
-git log upstream/"${INPUT_UPSTREAM_BRANCH}" "${LOCAL_COMMIT_HASH}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS}
+#echo 'New commits being synced:' 1>&1
+#git log upstream/"${INPUT_UPSTREAM_BRANCH}" "${LOCAL_COMMIT_HASH}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS}
 
 # sync from upstream to target_branch
-echo 'Syncing...' 1>&1
+#echo 'Syncing...' 1>&1
 # pull_args examples: "--ff-only", "--tags"
-git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
-echo 'Sync successful' 1>&1
+#git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
+#echo 'Sync successful' 1>&1
 
 # push to origin target_branch
-echo 'Pushing to target branch...' 1>&1
-git push ${INPUT_GIT_PUSH_ARGS} origin "${INPUT_TARGET_BRANCH}"
-echo 'Push successful' 1>&1
+#echo 'Pushing to target branch...' 1>&1
+#git push ${INPUT_GIT_PUSH_ARGS} origin "${INPUT_TARGET_BRANCH}"
+#echo 'Push successful' 1>&1
 
 # reset user credentials for future actions
 reset_git
