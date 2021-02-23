@@ -89,7 +89,7 @@ git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git tag -l
 LAST_TAGGED=$(git rev-list --tags --max-count=1)
 LAST_TAG=$(git describe --tags "${LAST_TAGGED}")
-git checkout "${LAST_TAGGED}" -b LAST_TAG
+git checkout "${LAST_TAGGED}" -b "${LAST_TAG}"
 git branch -d temp
 git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 
