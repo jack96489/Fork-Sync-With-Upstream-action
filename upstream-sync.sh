@@ -88,7 +88,8 @@ git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}" --
 git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git tag -l
 LAST_TAGGED=$(git rev-list --tags --max-count=1)
-git checkout -b "${LAST_TAGGED}" 
+LAST_TAG=$(git describe --tags "${LAST_TAGGED}")
+git checkout "${LAST_TAGGED}" -b LAST_TAG
 git branch -d temp
 git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 
