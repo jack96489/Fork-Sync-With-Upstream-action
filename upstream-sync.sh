@@ -93,6 +93,8 @@ git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
 LAST_REMOTE_TAGGED=$(git rev-list --tags --max-count=1)
 LAST_REMOTE_TAG=$(git describe --tags "${LAST_TAGGED}")
 
+echo "${LAST_REMOTE_TAG}"
+echo "${LAST_TAG}"
 
 if [ "${LAST_REMOTE_TAG}" = "${LAST_TAG}" ]; then
     echo "::set-output name=has_new_commits::false"
