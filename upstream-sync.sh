@@ -95,6 +95,7 @@ git merge "${LAST_TAGGED}"
 #git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git push -u origin "release/${LAST_TAG}"
 #git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
+git remote remove upstream
 echo ${INPUT_GITHUB_TOKEN} | gh auth login --with-token
 #gh auth login status
 gh pr create --title "Release ${LAST_TAG}" --fill # --body "$(git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS})"
