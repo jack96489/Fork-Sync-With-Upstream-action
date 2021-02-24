@@ -91,7 +91,7 @@ git branch temp
 git fetch upstream "${INPUT_UPSTREAM_BRANCH}" --tag
 git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
 LAST_REMOTE_TAGGED=$(git rev-list --tags --max-count=1)
-LAST_REMOTE_TAG=$(git describe --tags "${LAST_TAGGED}")
+LAST_REMOTE_TAG=$(git describe --tags "${LAST_REMOTE_TAGGED}")
 
 echo "${LAST_REMOTE_TAG}"
 echo "${LAST_TAG}"
