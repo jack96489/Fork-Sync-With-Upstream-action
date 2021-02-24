@@ -79,9 +79,9 @@ git remote add upstream "${UPSTREAM_REPO}"
 # git remote -v
 
 # check latest commit hashes for a match, exit if nothing to sync
-git fetch ${INPUT_GIT_FETCH_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
-LOCAL_COMMIT_HASH=$(git rev-parse "${INPUT_TARGET_BRANCH}")
-UPSTREAM_COMMIT_HASH=$(git rev-parse upstream/"${INPUT_UPSTREAM_BRANCH}")
+#git fetch ${INPUT_GIT_FETCH_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}"
+#LOCAL_COMMIT_HASH=$(git rev-parse "${INPUT_TARGET_BRANCH}")
+#UPSTREAM_COMMIT_HASH=$(git rev-parse upstream/"${INPUT_UPSTREAM_BRANCH}")
 
 git branch temp
 #git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}" --tag
@@ -92,7 +92,7 @@ LAST_TAG=$(git describe --tags "${LAST_TAGGED}")
 git checkout temp
 git branch -m "release/${LAST_TAG}"
 git merge "${LAST_TAGGED}"
-git log ${INPUT_GIT_LOG_FORMAT_ARGS}
+#git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git push -u origin "release/${LAST_TAG}"
 #git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
 #echo ${INPUT_GITHUB_TOKEN} > token
