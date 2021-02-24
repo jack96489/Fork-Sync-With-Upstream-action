@@ -116,7 +116,8 @@ git branch -m "release/${LAST_REMOTE_TAG}"
 git merge "${LAST_REMOTE_TAGGED}"
 #git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git push -u origin "release/${LAST_REMOTE_TAG}"
-#git log master..release/${LAST_REMOTE_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
+git push --tag
+#git log "${INPUT_TARGET_BRANCH}"..release/${LAST_REMOTE_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
 git remote remove upstream
 echo ${INPUT_GITHUB_TOKEN} | gh auth login --with-token
 #gh auth login status
