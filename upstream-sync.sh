@@ -83,15 +83,15 @@ git remote add upstream "${UPSTREAM_REPO}"
 #LOCAL_COMMIT_HASH=$(git rev-parse "${INPUT_TARGET_BRANCH}")
 #UPSTREAM_COMMIT_HASH=$(git rev-parse upstream/"${INPUT_UPSTREAM_BRANCH}")
 
-LAST_TAGGED=$(git rev-list --tags --max-count=1)
-LAST_TAG=$(git describe --tags "${LAST_TAGGED}")
+#LAST_TAGGED=$(git rev-list --tags --max-count=1)
+LAST_TAG=$(git describe --tags)
 
 
-git branch temp
+#git branch temp
 git fetch upstream "${INPUT_UPSTREAM_BRANCH}" --tag
-git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
-LAST_REMOTE_TAGGED=$(git rev-list --tags --max-count=1)
-LAST_REMOTE_TAG=$(git describe --tags "${LAST_REMOTE_TAGGED}")
+#git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
+#LAST_REMOTE_TAGGED=$(git rev-list --tags --max-count=1)
+LAST_REMOTE_TAG=$(git describe --tags)
 
 echo "${LAST_REMOTE_TAG}"
 echo "${LAST_TAG}"
@@ -111,9 +111,9 @@ fi
 #    exit 0
 #fi
 
-git checkout temp
-git branch -m "release/${LAST_REMOTE_TAG}"
-git merge "${LAST_REMOTE_TAGGED}"
+git checkout -b "release/${LAST_REMOTE_TAG}"
+#git branch -m "release/${LAST_REMOTE_TAG}"
+git merge "${LAST_REMOTE_TAG}"
 #git log ${INPUT_GIT_LOG_FORMAT_ARGS}
 git push -u origin "release/${LAST_REMOTE_TAG}"
 git push --tag
