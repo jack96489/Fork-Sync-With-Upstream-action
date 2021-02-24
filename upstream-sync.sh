@@ -83,22 +83,42 @@ git remote add upstream "${UPSTREAM_REPO}"
 #LOCAL_COMMIT_HASH=$(git rev-parse "${INPUT_TARGET_BRANCH}")
 #UPSTREAM_COMMIT_HASH=$(git rev-parse upstream/"${INPUT_UPSTREAM_BRANCH}")
 
-git branch temp
-#git pull --no-edit ${INPUT_GIT_PULL_ARGS} upstream "${INPUT_UPSTREAM_BRANCH}" --tag
-git fetch upstream "${INPUT_UPSTREAM_BRANCH}" --tag
-git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
 LAST_TAGGED=$(git rev-list --tags --max-count=1)
 LAST_TAG=$(git describe --tags "${LAST_TAGGED}")
+
+
+git branch temp
+git fetch upstream "${INPUT_UPSTREAM_BRANCH}" --tag
+git checkout "upstream/${INPUT_UPSTREAM_BRANCH}"
+LAST_REMOTE_TAGGED=$(git rev-list --tags --max-count=1)
+LAST_REMOTE_TAG=$(git describe --tags "${LAST_TAGGED}")
+
+
+if [ "${LAST_REMOTE_TAG}" = "${LAST_TAG}" ]; then
+    echo "::set-output name=has_new_commits::false"
+    echo 'No new commits to sync, exiting' 1>&1
+    reset_git
+    exit 0
+fi
+
+
+if [ $(git rev-parse --verify --quiet "release/${LAST_REMOTE_TAG}") != "" ]; then 
+	echo "::set-output name=has_new_commits::false"
+    echo 'No new commits to sync, exiting' 1>&1
+    reset_git
+    exit 0
+fi
+
 git checkout temp
-git branch -m "release/${LAST_TAG}"
-git merge "${LAST_TAGGED}"
+git branch -m "release/${LAST_REMOTE_TAG}"
+git merge "${LAST_REMOTE_TAGGED}"
 #git log ${INPUT_GIT_LOG_FORMAT_ARGS}
-git push -u origin "release/${LAST_TAG}"
-#git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
+git push -u origin "release/${LAST_REMOTE_TAG}"
+#git log master..release/${LAST_REMOTE_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS}
 git remote remove upstream
 echo ${INPUT_GITHUB_TOKEN} | gh auth login --with-token
 #gh auth login status
-gh pr create --title "Release ${LAST_TAG}" --fill # --body "$(git log master..release/${LAST_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS})"
+gh pr create --title "Release ${LAST_REMOTE_TAG}" --fill # --body "$(git log master..release/${LAST_REMOTE_TAG} ${INPUT_GIT_LOG_FORMAT_ARGS})"
 
 
 #if [ "${LOCAL_COMMIT_HASH}" = "${UPSTREAM_COMMIT_HASH}" ]; then
@@ -108,7 +128,7 @@ gh pr create --title "Release ${LAST_TAG}" --fill # --body "$(git log master..re
 #    exit 0
 #fi
 
-#echo "::set-output name=has_new_commits::true"
+echo "::set-output name=has_new_commits::true"
 # display commits since last sync
 #echo 'New commits being synced:' 1>&1
 #git log upstream/"${INPUT_UPSTREAM_BRANCH}" "${LOCAL_COMMIT_HASH}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS}
