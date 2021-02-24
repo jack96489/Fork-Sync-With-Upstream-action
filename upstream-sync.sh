@@ -104,7 +104,7 @@ fi
 
 if [ $(git rev-parse --verify --quiet "release/${LAST_REMOTE_TAG}") != "" ]; then 
 	echo "::set-output name=has_new_commits::false"
-    echo 'No new commits to sync, exiting' 1>&1
+    echo 'Waiting for branch release/${LAST_REMOTE_TAG} to be merged' 1>&1
     reset_git
     exit 0
 fi
