@@ -115,6 +115,7 @@ git checkout temp
 git branch -m "release/${LAST_REMOTE_TAG}"
 git merge "${LAST_REMOTE_TAGGED}"
 #git log ${INPUT_GIT_LOG_FORMAT_ARGS}
+git tag ${LAST_REMOTE_TAG} -f
 git push -u origin "release/${LAST_REMOTE_TAG}"
 git push --tag
 git log "${INPUT_TARGET_BRANCH}".."release/${LAST_REMOTE_TAG}" ${INPUT_GIT_LOG_FORMAT_ARGS}
